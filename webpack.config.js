@@ -1,9 +1,16 @@
 const path = require('path');
+
 // 自动生成index.html
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+
 // 自动删除dist目录
-const CleanWebpackPlugin = require('clean-webpack-plugin');
+// const CleanWebpackPlugin = require('clean-webpack-plugin');
+
 const webpack = require('webpack');
+
+module.exports = function(env) {
+  return require('./webpack.${env}.js')
+}
 
 module.exports = {
   entry: {
@@ -11,18 +18,27 @@ module.exports = {
     app: './src/index.js',
     print: './src/print.js'
   },
-  // Using source maps;If an error originates from a.js, the source map will tell you exactly that.
+  // Using source maps;
+  // If an error originates from a.js,
+  // the source map will tell you exactly that.
   devtool: 'inline-source-map',
   devServer: {
     contentBase: './dist',
     hot: true
   },
   plugins: [
-    new CleanWebpackPlugin(['dist']),
+    // new CleanWebpackPlugin(['dist']),
     new HtmlWebpackPlugin({
       title: 'Output Management'
     }),
-    new webpack.HotModuleReplacementPlugin()
+    new webpack.HotModuleReplacementPlugin(),
+    new webpack.DefinePlugin({
+      'process.env.NODE_ENV': JSON.stringify('production')
+    })
+    // 无法实现 始终报错
+    // new webpack.optimize.UglifyJsPlugin({
+    //   sourceMap: devtool && (devtool.indexOf("sourcemap") >= 0 || devtool.indexOf("source-map") >= 0)
+    // })
   ],
   output: {
     // filename: 'bundle.js',

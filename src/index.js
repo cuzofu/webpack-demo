@@ -8,7 +8,10 @@ import printMe from './print';
 if (module.hot) {
   module.hot.accept('./print.js', function() {
     console.log('Accepting the updated printMe module!');
-    printMe();
+    // printMe();
+    document.body.removeChild(element);
+    element = component();
+    documet.body.appendChild(element);
   })
 }
 
